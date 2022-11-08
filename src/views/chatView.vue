@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <div class="m-2 flex h-screen w-screen justify-center overflow-hidden bg-gray-100 p-6">
+  <div class="flex justify-center">
+    <div class="m-2 h-screen  w-[80%] bg-gray-100 p-6">
+      <div class="flex justify-end text-gray-900 font-semibold mb-2 hover:cursor-pointer" @click="logOut">Logout</div>
+
       <div
-        class="flex h-full w-full overflow-hidden rounded-lg bg-white shadow ring-1 ring-black ring-opacity-5"
+        class="flex h-full w-full overflow-auto rounded-lg bg-white shadow ring-1 ring-black ring-opacity-5"
       >
         <div class="h-full w-96 overflow-hidden border-r">
-          
-          
           <div class="border-b px-6 py-5 flex place-content-between">
             <input
               v-if="searchUser"
@@ -16,12 +16,11 @@
               placeholder="Search Conversation"
             />
             <div v-else class="font-semibold text-lg "> {{authUser.name}} </div>
-            <button class="ml-2 bg-slate-200 px-4 rounded-md text-lg place-content-end" @click="getConversation" v-if="!searchUser">+</button>
-            <button class="ml-2 bg-slate-200 px-4 rounded-md text-lg" @click="backButton" v-else>Back</button>
+            <button class="ml-2 bg-slate-800 hover:bg-slate-600 px-4 rounded-md text-lg text-white place-content-end" @click="getConversation" v-if="!searchUser">+</button>
+            <button class="ml-2 bg-slate-800  px-4 rounded-md text-lg text-white" @click="backButton" v-else>Back</button>
           </div>
 
           <div class="h-full overflow-auto" v-if="!searchUser">
-
             <div class="mb-4">
             <ul role="list" class="relative z-0 divide-y divide-gray-200">
               <li
@@ -31,7 +30,8 @@
                 :key="filteredConversation._id"
               >
                 <div
-                  class="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 hover:bg-gray-50"
+                  class="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset"
+                   :class="filteredConversation._id === selectedConversation._id ? 'bg-gray-200' : 'hover:bg-gray-100'"
                 >
                   <div class="flex-shrink-0">
                     <img
@@ -101,7 +101,7 @@
                       >{{user.name}}</p>
                     </div>
                   </div>
-                  <button class="ml-2 bg-slate-200 px-4 py-1 rounded-md text-lg " @click="createConversation(user)">
+                  <button class="ml-2 bg-slate-800 hover:bg-slate-600 px-4 py-1 rounded-md text-white text-lg " @click="createConversation(user)">
                     +
                   </button>
                 </div>
@@ -175,7 +175,7 @@
 
               <button
                 @click="sendMessage"
-                class="relative h-10 flex-none rounded-md text-sm font-semibold leading-6 py-1.5 px-3 hover:bg-blue-400 bg-blue-500 text-white shadow-sm dark:shadow-highlight/20"
+                class="relative h-10 flex-none rounded-md text-sm font-semibold leading-6 py-1.5 px-3 hover:bg-slate-600  bg-slate-800  text-white shadow-sm dark:shadow-highlight/20"
               >Send</button>
             </div>
           </div>
@@ -333,6 +333,11 @@ export default {
     async backButton() {
       this.searchUser = false,
       this.users = [];
+    },
+    async logOut() {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem('authUser');
+      this.$router.push("/login");
     }
   },
 }

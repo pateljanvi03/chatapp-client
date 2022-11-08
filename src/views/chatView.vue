@@ -136,7 +136,6 @@
                 <!-- Extend touch target to entire panel -->
                 <span class="inset-0" aria-hidden="true"></span>
                 <p class="text-sm font-medium text-gray-900">{{selectedConversation.otherUser.name}}</p>
-                <p class="truncate text-sm text-gray-500">Co-Founder / CEO</p>
               </div>
             </div>
           </div>

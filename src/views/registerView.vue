@@ -4,13 +4,31 @@
       <div class="sm:mx-auto sm:w-full sm:max-w-md">
         <h2
           class="mt-6 text-center text-3xl tracking-tight font-bold text-gray-900"
-        >Sign in to your account</h2>
+        >Register your account</h2>
       </div>
 
       <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md shadow-xl">
         <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <ValidationObserver v-slot="{ handleSubmit }">
-            <form class="space-y-6" @submit.prevent="handleSubmit(loginToPage)">
+            <form class="space-y-6" @submit.prevent="handleSubmit(registration)">
+
+              <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                <div class="mt-1">
+                  <ValidationProvider name="password" rules="required" v-slot="{ errors }">
+                    <input
+                      id="name"
+                      name="name"
+                      v-model="name"
+                      type="text"
+                      class="mt-2 appearance-none text-slate-900 bg-white rounded-md block w-full px-3 h-10 shadow-sm sm:text-sm focus:outline-none placeholder:text-slate-400"
+                      :class="errors.length ? 'focus:ring-2 focus:ring-sky-500 ring-2 ring-rose-400' : 'focus:ring-2 focus:ring-sky-500 ring-1 ring-slate-200'"
+                    />
+                    <span class="text-red-600 text-sm">{{ errors[0] }}</span>
+                  </ValidationProvider>
+                </div>
+                <div v-if="error != undefined" class="text-red-600 text-sm">{{error}}</div>
+              </div>
 
               <div>
                 <label for="email" class="block text-sm font-medium text-gray-700">Username</label>
@@ -78,9 +96,9 @@
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     />
                   </svg>
-                  Sign in
+                  Register
                 </button>
-                <button class="text-red-500 hover:underline" @click="register">Register?</button>
+                <button  type="button" @click="signIn" class="text-red-500 hover:underline">Sign In?</button>
               </div>
             </form>
           </ValidationObserver>
@@ -96,6 +114,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      name:"",
       userName: "",
       password: "",
       error: undefined,
@@ -103,25 +122,26 @@ export default {
     };
   },
   methods: {
-    async loginToPage() {
+    async registration() {
       try {
-          this.isLoading = true;
-          this.error = undefined;
-          const response = await axios.post("/auth/login", {
+          this.isLoading = true
+          const response = await axios.post("/users", {
+            name: this.name,
             username: this.userName,
             password: this.password
           });
-          localStorage.setItem("accessToken", response.data.token?.accessToken);
-          localStorage.setItem('authUser', JSON.stringify(response.data.user));
-          this.$router.push("/chat");
+          console.log(response);
+          this.name = "";
+          this.username = "";
+          this.password = ""
       } catch (err) {
         this.error = err.response?.data?.message;
       }
-
       this.isLoading = false;
+      this.$router.push('/login');
     },
-    async register() {
-      this.$router.push("/register");
+    async signIn() {
+      this.$router.push('/login');
     }
   
   }

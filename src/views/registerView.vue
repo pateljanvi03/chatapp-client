@@ -98,7 +98,7 @@
                   </svg>
                   Register
                 </button>
-                <button  type="button" @click="signIn" class="text-red-500 hover:underline">Sign In?</button>
+                <button  type="button" @click="signIn" class="text-blue-700 hover:underline">Sign In?</button>
               </div>
             </form>
           </ValidationObserver>
@@ -125,12 +125,11 @@ export default {
     async registration() {
       try {
           this.isLoading = true
-          const response = await axios.post("/users", {
+          await axios.post("/users", {
             name: this.name,
             username: this.userName,
             password: this.password
           });
-          console.log(response);
           this.name = "";
           this.username = "";
           this.password = ""

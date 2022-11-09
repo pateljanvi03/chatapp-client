@@ -40,6 +40,9 @@ router.beforeEach((req, res, next) => {
     if (req.path === '/login') {
       return next()
     }
+    if(req.path === '/register') {
+      return next();
+    }
     return next({ name: 'login' })
   }
 

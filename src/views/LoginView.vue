@@ -80,7 +80,7 @@
                   </svg>
                   Sign in
                 </button>
-                <button class="text-red-500 hover:underline" @click="register">Register?</button>
+                <button type="button" class="text-blue-700 hover:underline" @click="register">Register?</button>
               </div>
             </form>
           </ValidationObserver>
